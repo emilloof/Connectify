@@ -1,0 +1,73 @@
+#signup{
+    margin-bottom: 0px;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    margin-top: 10px;
+}
+
+#welcome{
+    margin: auto;
+    height: 400px;
+    width: 600px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-between;
+    background-color: bisque;
+}
+
+#data{
+    display: flex;
+    margin-left: 10px;
+    margin-top: 0px;
+    flex-direction: column;
+    justify-content: space-between; /* This will push the signup form to the bottom */
+    height: 100%;
+   
+}
+
+#logo{
+    height: 400px;
+    width: 340px;
+}
+
+#signuptext{
+    font-weight: bold;
+    display: flex;
+}
+
+#login{
+    background-color: white;
+    height: 90px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0px;
+}
+
+.button{
+    align-self: flex-end;
+}
+
+.textfield{
+    height: 25px;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.fieldinput{
+    height: fit-content;
+    width: 150px;
+    margin: auto;
+}
+
+.fieldname{
+    margin-left: 5px;
+    margin-top: 0px;
+    width: 95px;
+}

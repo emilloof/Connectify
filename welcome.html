@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" type="text/css" href="welcome.css">
+</head>
+
+<body id="welcome">
+
+    <div id="logo">
+        <img src="wimage.png">
+        
+    </div>
+
+    <div id="data">
+        <form id="login" onsubmit="saveContact(this); return false;">
+            <div class="textfield">
+                <p class="fieldname">Email</p>
+                <input type="text" name="email" class="fieldinput" id="loginemail" required>
+            </div>
+            <div class="textfield">
+                <p class="fieldname">Password</p>
+                <input type="text" name="password" class="fieldinput" id="loginpassword" required>
+            </div>
+            <input type="submit" value="Login" class="button">
+            <div id="feedback"></div>
+        </form>
+
+        <form id="signup" onsubmit="signUp(this); return false;">
+            <p id="signuptext">Sign up here</p>
+            <div class="textfield">
+                <p class="fieldname">First Name</p>
+                <input type="text" name="firstname" class="fieldinput" id="firstname" required>
+            </div>
+
+            <div class="textfield">
+                <p class="fieldname">Family name</p>
+                <input type="text" name="familyname" class="fieldinput" id="familyname" required>
+            </div>
+
+            <div class="textfield">
+                <p class="fieldname">Gender</p>
+                <select type="" name="gender" class="fieldinput" id="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="textfield">
+                <p class="fieldname">City</p>
+                <input type="text" name="city" class="fieldinput" id="city" required>
+            </div>
+
+            <div class="textfield">
+                <p class="fieldname">Country</p>
+                <input type="text" name="country" class="fieldinput" id="country" required>
+            </div>
+            
+            <div class="textfield">
+                <p class="fieldname">Email</p>
+                <input type="text" name="signupemail" class="fieldinput" id="signupemail" required>
+            </div>
+            
+            <div class="textfield">
+                <p class="fieldname">Password</p>
+                <input type="text" name="signuppassword1" class="fieldinput" id="singuppassword1" required>
+            </div>
+            
+            <div class="textfield">
+                <p class="fieldname">Repeat PSW</p>
+                <input type="text" name="signuppassword2" class="fieldinput" id="signuppassword2" required>
+            </div>
+            <input type="submit" value="SignUp" class="button">
+            <div id="feedback"></div>
+        </form>
+    
+    </div>
+
+</body>
+
+</html>
