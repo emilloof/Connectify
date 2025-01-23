@@ -1,10 +1,33 @@
+function displayProfile(){
+    let token = localStorage.getItem('token');
+    if(token != null){
+        document.body.innerHTML = document.getElementById("profilescript").innerHTML;
+    }
+
+    else{
+        document.body.innerHTML = document.getElementById("welcomescript").innerHTML;
+    }
+
+}
+
 function validatePasswordLogin(input) {
     let password = input.loginpassword.value;
     if (!isLongPassword(password)) {
         document.getElementById('feedbackLogin').innerHTML = "Minimum password length is 8 chars!";
     }
     else {
-        document.getElementById('feedbackLogin').innerHTML = "Success";
+        let username = input.loginemail.value;
+        let answer = serverstub.signIn(username, password);
+            
+        if(!answer.success) {
+            document.getElementById('feedbackLogin').innerHTML = answer.message;
+        }
+        else{
+            let token = answer.data;
+            localStorage.setItem('token', token);
+            displayProfile();
+        }
+        
     }
 }
 
@@ -19,7 +42,18 @@ function validatePasswordSignUp(input) {
             document.getElementById('feedbackSignUp').innerHTML = "Minimum password length is 8 chars!";
         }
         else {
-            document.getElementById('feedbackSignUp').innerHTML = "Success";
+            let dataObject = {
+                email: input.signupemail.value,
+                password: input.signuppassword1.value,
+                firstname: input.firstname.value,
+                familyname: input.familyname.value,
+                gender: input.gender.value,
+                city: input.city.value,
+                country: input.country.value
+            };
+            let answer = serverstub.signUp(dataObject);
+            document.getElementById('feedbackSignUp').innerHTML = answer.message;
+            
         }
     }
     catch(e) {
@@ -33,3 +67,5 @@ function isLongPassword(password) {
     }
     return true;
 }
+
+window.onload = displayProfile;

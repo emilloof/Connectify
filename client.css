@@ -55,7 +55,7 @@ body{
     align-self: flex-end;
 }
 
-.textfield{;
+.textfield{
     height: 25px;
     display: flex;
     justify-content: space-between;
