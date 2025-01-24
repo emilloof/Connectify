@@ -9,13 +9,33 @@
                 <button class="tablink" onclick="openTab('home', this)" id="default">Home</button>
                 <button class="tablink" onclick="openTab('browse', this)">Browse</button>
                 <button class="tablink" onclick="openTab('account', this)">Account</button>
-        
-                <div id="home" class="tabcontent">
-                    <h2>Home</h2>
-                </div>
             
                 <div id="browse" class="tabcontent">
                     <h2>Browse</h2>
+                    <form id="searchuser" onsubmit="searchUser(this); return false;">
+                        <div class="searchtextfield">
+                            <p class="searchfieldname">Enter email:</p>
+                            <input type="email" name="searchemail" class="searchfieldinput" id="searchemail" required>
+                        </div>
+                        <input type="submit" value="Search">
+                        <div id="feedbackSearch"></div>
+                    </form>
+                    
+                </div>
+
+                <div id="home" class="tabcontent">
+                    <div id="homeuserinfo"></div>
+                    <div id="messageboard">
+                        <form id="messagebar" onsubmit="sendMessage(this); return false;">
+                            <p>Post a message:</p>
+                            <input type="text" name="messagefield" id="messagefield">
+                            <input type="submit" value="Send Message">
+                            <div id="feedbackMessage"></div>
+                        </form>
+                        <button id="reloadbutton" onclick="reloadWall()">Reload Wall</button>
+                        <h3 id="messageheader">Message Wall</h3>
+                        <div id="messagewall"></div>
+                    </div>
                 </div>
             
                 <div id="account" class="tabcontent">

@@ -13,11 +13,22 @@
         <button class="tablink" onclick="openTab('account', this)">Account</button>
 
         <div id="home" class="tabcontent">
-            <h2>Home</h2>
+            <div id="homeuserinfo"></div>
+            <div id="messageboard">
+                <form id="messagebar" onsubmit="sendMessage(this); return false;">
+                    <p>Post a message:</p>
+                    <input type="text" name="messagefield" id="messagefield">
+                    <input type="submit" value="Send Message">
+                    <button id="reloadbutton">Reload Wall</button>
+                </form>
+                <p>Message Wall</p>
+                <div id="messagewall"></div>
+            </div>
         </div>
     
         <div id="browse" class="tabcontent">
             <h2>Browse</h2>
+            
         </div>
     
         <div id="account" class="tabcontent">

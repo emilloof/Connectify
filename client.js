@@ -3,6 +3,8 @@ function displayProfile(){
     if(token != null){
         document.body.innerHTML = document.getElementById("profilescript").innerHTML;
         document.getElementById("default").click();
+        displayUserInfo();
+        reloadWall();
     }
 
     else{
@@ -116,4 +118,58 @@ function signOut(){
     localStorage.removeItem('token'); //maybe use "" instead of null
     displayProfile();
     document.getElementById('feedbackLogin').innerHTML = answer.message;
+}
+
+function displayUserInfo(){
+    let token = localStorage.getItem('token');
+    let user = serverstub.getUserDataByToken(token).data;
+    let data = `
+        <h2>Profile</h2>
+        <p>First Name: ${user.firstname}</p>
+        <p>Family Name: ${user.familyname}</p>
+        <p>Gender: ${user.gender}</p>
+        <p>City: ${user.city}</p>
+        <p>Country: ${user.country}</p>
+        <p>Email: ${user.email}</p>
+        `
+        document.getElementById("homeuserinfo").innerHTML = data;
+}
+
+function sendMessage(data){
+    document.getElementById('feedbackMessage').innerHTML = "";
+    let token = localStorage.getItem('token');
+    let user = serverstub.getUserDataByToken(token).data;
+    let email = user.email;
+    let message = data.messagefield.value;
+    if(message.length != 0){
+        let answer = serverstub.postMessage(token, message, email);
+        if (answer.success){
+            document.getElementById("messagefield").value = "";
+            reloadWall();
+        }
+        else{
+            document.getElementById('feedbackMessage').innerHTML = answer.message
+        }
+    }
+    else{
+        document.getElementById('feedbackMessage').innerHTML = "Message field is empty!";
+    }
+    
+}
+
+function reloadWall(){
+    document.getElementById("messagewall").innerHTML = "";
+    let token = localStorage.getItem('token');
+    let messagewall = (serverstub.getUserMessagesByToken(token)).data;
+  
+    for (let index in messagewall) {
+        let output = '<div>' + messagewall[index].writer + ': ' + messagewall[index].content + '</div>';
+        document.getElementById("messagewall").innerHTML += output;
+    }
+}
+
+function searchUser(email){
+    let token = localStorage.getItem('token');
+    document.getElementById('home').style.display = "block";
+    reloadWall(email);
 }

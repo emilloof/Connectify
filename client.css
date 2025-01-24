@@ -8,9 +8,6 @@
     height: 300px;
     margin-top: 10px;
 }
-body{
-    background-color: bisque;
-}
 
 #welcome{
     margin: auto;
@@ -78,6 +75,7 @@ body{
 body, html {
     height: 100%;
     margin: 0;
+    background-color: bisque;
   }
 
 .tablink {
@@ -102,3 +100,43 @@ body, html {
     flex-direction: column;
     row-gap: 3px;
 }
+
+
+#homeuserinfo{
+    background-color: lightsalmon;
+    display: inline-block;
+    padding: 50px;
+    margin-top: 10px;
+    vertical-align: top;
+  }
+  
+  #home{
+    display: inline-block;
+  }
+  
+  
+  #messageboard{
+    margin-top: 10px;
+    display: inline-block;
+    background-color: lightsalmon;
+    height: 750px;
+    width: 750px;
+    margin-left: 8px;
+  }
+  
+  #messagewall{
+    overflow-y: scroll;
+    max-height: 600px;
+    margin-left: 10px;
+  }
+  
+  #messagefield{
+    width: 500px;
+    margin-left: 10px;
+    margin-top: 0px;
+  }
+
+  #messageheader{
+    border-bottom: 1px solid #555;
+    margin-bottom: 0px;
+  }

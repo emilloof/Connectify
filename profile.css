@@ -19,3 +19,33 @@ body, html {
     background-color: #777;
   }
 
+
+  /*______part 8_______*/
+
+#homeuserinfo{
+  background-color: red;
+  display: inline-block;
+  padding: 50px;
+  margin-top: 10px;
+}
+
+#home{
+  display: inline-block;
+}
+
+
+#messageboard{
+  display: inline-block;
+  background-color: lightsalmon;
+  height: 750px;
+  width: 750px;
+}
+
+#messagewall{
+  overflow-y: scroll;
+}
+
+#messagefield{
+  width: 500px;
+  margin-left: 10px;
+}
