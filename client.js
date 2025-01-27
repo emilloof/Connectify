@@ -55,8 +55,7 @@ function validatePasswordSignUp(input) {
                 country: input.country.value
             };
             let answer = serverstub.signUp(dataObject);
-            document.getElementById('feedbackSignUp').innerHTML = answer.message;
-            
+            document.getElementById('feedbackSignUp').innerHTML = answer.message;            
         }
     }
     catch(e) {
@@ -125,7 +124,7 @@ function displayHomeInfo(){
     let token = localStorage.getItem('token');
     let user = serverstub.getUserDataByToken(token).data;
     let data = `
-        <h2>Profile</h2>
+        <h2>Your Profile</h2>
         <p>First Name: ${user.firstname}</p>
         <p>Family Name: ${user.familyname}</p>
         <p>Gender: ${user.gender}</p>
@@ -141,7 +140,7 @@ function displayBrowseInfo(){
     let email = localStorage.getItem('email');
     let user = serverstub.getUserDataByEmail(token, email).data;
     let data = `
-        <h2>Profile</h2>
+        <h2>${user.firstname}s Profile</h2>
         <p>First Name: ${user.firstname}</p>
         <p>Family Name: ${user.familyname}</p>
         <p>Gender: ${user.gender}</p>
@@ -182,7 +181,7 @@ function browseSendMessage(data){
         let answer = serverstub.postMessage(token, message, email);
         if (answer.success){
             document.getElementById("browsemessagefield").value = "";
-            reloadWall();
+            browseReloadWall();
         }
         else{
             document.getElementById('browsefeedbackmessage').innerHTML = answer.message
@@ -226,6 +225,7 @@ function searchUser(input){
         document.getElementById("feedbacksearch").innerHTML = "You cannot search your own email!";
     }
     else if(serverstub.getUserMessagesByEmail(token, searchEmail).success){
+      //  document.getElementById('searchuser').classList.add('left'); // Add the 'left' class
         document.getElementById('browsemessagediv').style.display = "block";
         localStorage.setItem('email', searchEmail);
         displayBrowseInfo();
@@ -233,5 +233,7 @@ function searchUser(input){
     }
     else {
         document.getElementById("feedbacksearch").innerHTML = "Email does not exist!";
+        document.getElementById('browsemessagediv').style.display = "none";
+
     }
 }
