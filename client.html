@@ -11,35 +11,49 @@
                 <button class="tablink" onclick="openTab('account', this)">Account</button>
             
                 <div id="browse" class="tabcontent">
-                    <h2>Browse</h2>
                     <form id="searchuser" onsubmit="searchUser(this); return false;">
                         <div class="searchtextfield">
                             <p class="searchfieldname">Enter email:</p>
                             <input type="email" name="searchemail" class="searchfieldinput" id="searchemail" required>
                         </div>
                         <input type="submit" value="Search">
-                        <div id="feedbackSearch"></div>
+                        <div id="feedbacksearch"></div>
                     </form>
-                    
+
+
+                    <div id="browsemessagediv" style="display: none">
+                        <div id="browseuserinfo" class="userinfo"></div>
+                        <div id="browsemessageboard" class="messageboard">
+                            <form id="broswemessagebar" class="messagebar" onsubmit="browseSendMessage(this); return false;">
+                                <p>Post a message:</p>
+                                <input type="text" name="messagefield" id="browsemessagefield" class="messagefield">
+                                <input type="submit" value="Send Message">
+                                <div id="browsefeedbackmessage"></div>
+                            </form>
+                            <button id="browsereloadbutton" onclick="browseReloadWall()">Reload Wall</button>
+                            <h3 id="browsemessageheader" class="messageheader">Message Wall</h3>
+                            <div id="browsemessagewall" class="messagewall"></div>
+                        </div>  
+                    </div>
                 </div>
 
                 <div id="home" class="tabcontent">
-                    <div id="homeuserinfo"></div>
-                    <div id="messageboard">
-                        <form id="messagebar" onsubmit="sendMessage(this); return false;">
+                    <div id="homeuserinfo" class="userinfo"></div>
+                    <div id="homemessageboard" class="messageboard">
+                        <form id="homemessagebar" class="messagebar" onsubmit="homeSendMessage(this); return false;">
                             <p>Post a message:</p>
-                            <input type="text" name="messagefield" id="messagefield">
+                            <input type="text" name="messagefield" id="homemessagefield" class="messagefield">
                             <input type="submit" value="Send Message">
-                            <div id="feedbackMessage"></div>
+                            <div id="homefeedbackmessage"></div>
                         </form>
-                        <button id="reloadbutton" onclick="reloadWall()">Reload Wall</button>
-                        <h3 id="messageheader">Message Wall</h3>
-                        <div id="messagewall"></div>
+                        <button id="homereloadbutton" onclick="homeReloadWall()">Reload Wall</button>
+                        <h3 id="homemessageheader" class="messageheader">Message Wall</h3>
+                        <div id="homemessagewall" class="messagewall"></div>
                     </div>
                 </div>
             
                 <div id="account" class="tabcontent">
-                    <h2>Account</h2>
+                    
                     <form id="changepassword" onsubmit="changePassword(this); return false;">
                         <div class="accounttextfield">
                             <p class="accountfieldname">Old Password</p>
