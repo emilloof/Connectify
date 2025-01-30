@@ -100,6 +100,28 @@ body, html {
   margin-right: auto;
   max-width: fit-content;
   row-gap: 3px;
+  margin-top: 70px;
+}
+
+#searchuser{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: fit-content;
+  margin-top: 70px;
+}
+
+/*
+#searchuser.left {
+  margin-left: 0;
+  margin-right: auto;
+  margin-top: 70px;
+  position: relative;
+}
+*/
+
+#accountsumbit{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 
@@ -128,6 +150,8 @@ body, html {
   margin-left: auto;
   margin-right: auto;
   max-width: fit-content;
+  padding: absolute;
+ /* margin-top: -110px; */
 }
 
 
