@@ -1,31 +1,43 @@
 from __init__ import create_app
 from database_helper import *
 from flask import Flask, request, jsonify
+import datetime
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import secrets
 
 app = create_app()
 
 
-"""
 
-ONLY SIGN_UP IS SOMEWHAT FINISHED, IGNORE THE REST
+#RETURN True OR "true" IDKK
 
-
-"""
 
 @app.route('/')
-def testa():
-    y = find_user("john.doe@example.com")
-    if y["success"]:
-        return jsonify(y["user"])
-    return y
+def home():
+    return "Welcome to Twidder"
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    email = request.json.get("email")
+
+    email = request.json.get("username")
     password = request.json.get("password")
 
-    print(find_user(email))
-    return "da"
+    user = find_user(email)
+    if not user["success"]:
+        return jsonify(user)
+
+    user_data = user["user"]
+
+    if user_data["password"] != password:
+        return jsonify({"message": "Wrong username or password", "success": False})
+
+    token = secrets.token_hex(40)
+
+    s = add_token(email, token)
+
+    return jsonify({"message": "Successfully logged in", "success": True, "data": token})
+
+
 
 
 @app.route('/sign_up', methods=['POST'])
@@ -36,16 +48,141 @@ def sign_up():
     city = request.json.get("city")
     country = request.json.get("country")
     email = request.json.get("email")
-    password = request.json.get("password")  
+    password = request.json.get("password")
+
+    if not (firstname and familyname and gender and city and country and email and password): #can use isinstance(str)
+        return jsonify({"message": "invalid input", "success": False})
+
+    if not is_valid_email(email):
+        return jsonify({"message": "Not a valid email", "success": False})
+
+    #valid password
 
     if find_user(email)["success"]:
-        return jsonify({"message": "There already excist a user with that email"}), 400
+        return jsonify({"message": "There already excist a user with that email", "success": False})
     
-    return add_user(firstname, familyname, gender, city, country, email, password)
+    added_success = add_user(firstname, familyname, gender, city, country, email, password)
+    if added_success:
+        return jsonify({"message": "User added successfully", "success": True})
+    return jsonify({"message": "Something went wrong", "success": False})
+
+
+@app.route('/change_password', methods=['PUT'])
+def change_password():
+    token = request.headers.get("Authorization")
+
+    oldpassword = request.json.get("oldpassword")
+    newpassword = request.json.get("newpassword")
+
+    email = get_email_from_token(token)
+    if not email:
+        return wrong_token()
+
+    if not isinstance(oldpassword, str) or not isinstance(newpassword, str):
+        return jsonify(message="IDK", success=False)
+
+    if newpassword == oldpassword:
+        return jsonify({"message": "You cant change to your old password", "success": False})
+
+    if not is_valid_password(newpassword):
+        return jsonify({"message": "Use a valid password", "success": False})
+
+    if not is_correct_password(email, oldpassword):
+        return jsonify({"message": "Incorrect old password", "success": False})
+
+    change_success = change_password_sql(newpassword, email)
+    if change_success:
+        return jsonify({"message": "Password changed", "success": True})
+    return jsonify({"message": "Something went wrong", "success": False})
+
+
+@app.route('/get_user_data_by_token', methods=['GET'])
+def get_user_data_by_token():
+    token = request.headers.get("Authorization")
+    email = get_email_from_token(token)
+    if not email:
+        return wrong_token()
+    user = find_user(email)
+    return user
+
+
+@app.route('/get_user_data_by_email/<email>', methods=['GET'])
+def get_user_data_by_email(email):
+    token = request.headers.get("Authorization")
+
+    my_email = get_email_from_token(token)
+    if not my_email:
+        return wrong_token()
+
+    user = find_user(email)
+    return user
+
+
+@app.route('/post_message', methods=['POST'])
+def post_message():
+    token = request.headers.get("Authorization")
+    message = request.json.get("message")
+    email = request.json.get("email")
+
+    if not isinstance(message, str) or not isinstance(email, str):
+        return jsonify({"message": "Wrong input", "success": False})
+
+    user = find_user(email)
+    if not user["success"]:
+        return user
+
+    my_email = get_email_from_token(token)
+    if not my_email:
+        return wrong_token()
+
+    success = post_message_sql(my_email, email, message)
+    if not success:
+        return jsonify({"message": "Sum went wrong ngl", "success": False})
+    return jsonify({"message": "Successfully posted a message", "success": True})
+
+
+@app.route('/get_user_messages_by_token', methods=['GET'])
+def get_user_messages_by_token():
+    token = request.headers.get("Authorization")
+    #verify_token(token)
+    messages = get_messages_by_token(token)
+    if not messages:
+        return jsonify({"message": "TODO", "success": False})
+    return jsonify({"message": "Here are your messages", "success": True, "data": messages})
+
+
+@app.route('/get_user_messages_by_email/<email>', methods=['GET'])
+def get_user_messages_by_email(email):
+    token = request.headers.get("Authorization")
+    my_email = get_email_from_token(token)
+    if not my_email:
+        return wrong_token()
+
+    messages = get_messages_by_email(email)
+    if not messages:
+        return jsonify({"message": "TODO", "success": False})
+    return jsonify({"message": "Here are your messages", "success": True, "data": messages})
+
+
+@app.route('/sign_out', methods=['DELETE'])
+def sign_out():
+    token = request.headers.get("Authorization")
+    my_email = get_email_from_token(token)
+    if not my_email:
+        return wrong_token()
+
+    logged_out = remove_logged_user(token)
+
+    if not logged_out:
+        return jsonify({"message": "Sum went wrong", "success": False})
+    return jsonify({"message": "Successfully logged out", "success": True})
+
+
 
 
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8084)
-    init_db()
+    with app.app_context():
+        init_db()
+    app.run(host='0.0.0.0', port=8085)

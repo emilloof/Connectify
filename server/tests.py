@@ -605,7 +605,7 @@ def contains_true(json_data):
 
 def set_up_base_url():
     default_address = 'http://127.0.0.1'
-    default_port = 5000
+    default_port = 8085
 
     address = input(f'Enter address (default {default_address}): ') or default_address
     port = input(f'Enter port (default {default_port}): ') or default_port

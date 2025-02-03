@@ -114,7 +114,7 @@ function changePassword(input){
 function signOut(){
     let token = localStorage.getItem('token');
     let answer = serverstub.signOut(token);
-    localStorage.removeItem('token'); //maybe use "" instead of null
+    localStorage.removeItem('token'); 
     localStorage.removeItem('email');
     displayProfile();
     document.getElementById('feedbackLogin').innerHTML = answer.message;
