@@ -4,17 +4,6 @@ import os
 import re
 from server import app
 
-
-"""
-
-
-THE RETURN VALUES OF THE FUNCTIONS ARE NOT DONE YET.
-IM NOT SURE WHAT WE WANT TO RETURN
-
-
-"""
-
-
 DATABASE = os.path.join(os.path.dirname(__file__), 'database.db')
 
 def init_db():
@@ -210,4 +199,4 @@ def is_valid_password(password):
     return True
 
 def wrong_token():
-    return jsonify({"message": "Wrong token lil bro", "success": False})
+    return jsonify({"message": "Wrong token!", "success": False})

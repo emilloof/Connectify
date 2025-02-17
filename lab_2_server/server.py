@@ -9,12 +9,10 @@ app = create_app()
 
 
 
-#RETURN True OR "true" IDKK
-
 
 @app.route('/')
 def home():
-    return current_app.send_static_file('client.html')
+    return "hello world"
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
@@ -78,7 +76,7 @@ def change_password():
         return wrong_token()
 
     if not isinstance(oldpassword, str) or not isinstance(newpassword, str):
-        return jsonify(message="IDK", success=False)
+        return jsonify({"message": "Invalid input", "success": False})
 
     if newpassword == oldpassword:
         return jsonify({"message": "You cant change to your old password", "success": False})
@@ -136,17 +134,16 @@ def post_message():
 
     success = post_message_sql(my_email, email, message)
     if not success:
-        return jsonify({"message": "Sum went wrong ngl", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Successfully posted a message", "success": True})
 
 
 @app.route('/get_user_messages_by_token', methods=['GET'])
 def get_user_messages_by_token():
     token = request.headers.get("Authorization")
-    #verify_token(token)
     messages = get_messages_by_token(token)
     if not messages:
-        return jsonify({"message": "TODO", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Here are your messages", "success": True, "data": messages})
 
 
@@ -159,7 +156,7 @@ def get_user_messages_by_email(email):
 
     messages = get_messages_by_email(email)
     if not messages:
-        return jsonify({"message": "", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Here are your messages", "success": True, "data": messages})
 
 
@@ -178,10 +175,7 @@ def sign_out():
 
 
 
-
-
-
 if __name__ == "__main__":
-  #  with app.app_context():
-   #     init_db()
+    with app.app_context():
+        init_db()
     app.run(host='0.0.0.0', port=8080)

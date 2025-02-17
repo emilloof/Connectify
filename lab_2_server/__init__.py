@@ -2,15 +2,6 @@ import os
 
 from flask import Flask
 
-
-"""
-
-JUST STANDARD CODE FROM TUTORIAL I COPIED
-IDK HOW IT WORKS
-
-
-"""
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)

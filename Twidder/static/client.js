@@ -1,5 +1,4 @@
 function displayProfile(){
-    console.log("display");
     let token = localStorage.getItem('token');
     if(token != null){
         let ws = new WebSocket("ws://localhost:5000/echo");
@@ -10,9 +9,10 @@ function displayProfile(){
 
         ws.onmessage = function(event) {
             if (event.data === "You have been logged out due to login from another browser.") {
-                forcedSignOut();
+                signOut();
             }
         };
+        console.log("profile");
         document.body.innerHTML = document.getElementById("profilescript").innerHTML;
         document.getElementById("default").click();
         displayHomeInfo();
@@ -30,9 +30,7 @@ function validatePasswordLogin(input) {
     if (!isLongPassword(password_temp)) {
         document.getElementById('feedbackLogin').innerHTML = "Minimum password length is 8 chars!";
     }
-    else {       
-
-        //let answer = serverstub.signIn(username, password);
+    else {      
         let dataObject = {
             username: input.loginemail.value,
             password: password_temp
@@ -44,7 +42,6 @@ function validatePasswordLogin(input) {
         xhttp.onreadystatechange = function() {
             if (this.status == 200 && this.readyState == 4) {
                 let answer = JSON.parse(xhttp.responseText);
-
                 if(answer.success) {
                     let token = answer.data;
                     localStorage.setItem('token', token);
@@ -84,12 +81,7 @@ function validatePasswordSignUp(input) {
                 city: input.city.value,
                 country: input.country.value
             };
-            //let answer = serverstub.signUp(dataObject);
             
-            /*
-            NEW CODE FOR LAB 3
-            */
-
             let xhttp = new XMLHttpRequest();
             xhttp.open('POST', '/sign_up', true);
             xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -189,26 +181,6 @@ function signOut(){
     }
 }
 
-function forcedSignOut(){
-    let token = localStorage.getItem('token');
-    //let answer = serverstub.signOut(token);
-    let xhttp = new XMLHttpRequest();
-    xhttp.open('DELETE', '/forced_sign_out', true);
-    xhttp.setRequestHeader('Authorization', token);
-    xhttp.send();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState === 4) {
-            if (this.status === 200) {
-                let answer = JSON.parse(xhttp.responseText);
-                localStorage.removeItem('token'); 
-                localStorage.removeItem('email');
-                displayProfile();
-                document.getElementById('feedbackLogin').innerHTML = answer.message
-            }
-        }
-    }
-}
-
 function displayHomeInfo(){
     let token = localStorage.getItem('token');
     //let user = serverstub.getUserDataByToken(token).data;
@@ -237,7 +209,7 @@ function displayHomeInfo(){
 
 function displayBrowseInfo(){
     let token = localStorage.getItem('token');
-    let email = localStorage.getItem('email');
+    let email = document.getElementById('searchemail');
     //let user = serverstub.getUserDataByEmail(token, email).data;
     let xhttp = new XMLHttpRequest();         
     let url = "/get_user_data_by_email/" + email;

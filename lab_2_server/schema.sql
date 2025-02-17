@@ -23,6 +23,6 @@ CREATE TABLE message (
 );
 
 CREATE TABLE loggeduser (
-    email VARCHAR(50) NOT NULL,
+    email VARCHAR(50) PRIMARY KEY,
     token VARCHAR(70) NOT NULL
 );

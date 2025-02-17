@@ -6,31 +6,17 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 import secrets
 from flask_sock import Sock
 
-#app = create_app()
 app = Flask(__name__)
 sock = Sock(app)
 
 active_sessions = {}
-active_token = {}
-
-#RETURN True OR "true" IDKK
 
 @sock.route('/echo')
 def echo(ws):
     token = ws.receive() 
-    user_id = get_email_from_token(token)
-    print("token: " + token)
-    if (user_id in active_token):
-        print("active_token: " + active_token[user_id])
-    else:
-        print("active_token: none")
-    if (user_id in active_token and token != active_token[user_id]) and user_id in active_sessions:
-        existing_ws = active_sessions[user_id]
-        existing_ws.send("You have been logged out due to login from another browser.")
-        existing_ws.close()
+    email = get_email_from_token(token)
 
-    active_sessions[user_id] = ws
-    active_token[user_id] = token
+    active_sessions[email] = ws
 
     try:
         while True:
@@ -57,13 +43,17 @@ def sign_in():
     user_data = user["user"]
 
     if user_data["password"] != password:
-        return jsonify({"message": "Wrong username or password"}), 400
+        return jsonify({"message": "Wrong username or password", "success": False}), 400
+
+    old_session = active_sessions.pop(email, 0);
+    if old_session:
+        old_session.send("You have been logged out due to login from another browser.")
 
     token = secrets.token_hex(40)
 
     s = add_token(email, token)
 
-    return jsonify({"message": "Successfully logged in", "data": token}), 200
+    return jsonify({"message": "Successfully logged in", "data": token, "success": True}), 200
 
 
 @app.route('/sign_up', methods=['POST'])
@@ -105,7 +95,7 @@ def change_password():
         return wrong_token()
 
     if not isinstance(oldpassword, str) or not isinstance(newpassword, str):
-        return jsonify(message="IDK", success=False)
+        return jsonify({"message": "Invalid input", "success": False})
 
     if newpassword == oldpassword:
         return jsonify({"message": "You cant change to your old password", "success": False})
@@ -163,17 +153,16 @@ def post_message():
 
     success = post_message_sql(my_email, email, message)
     if not success:
-        return jsonify({"message": "Sum went wrong ngl", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Successfully posted a message", "success": True})
 
 
 @app.route('/get_user_messages_by_token', methods=['GET'])
 def get_user_messages_by_token():
     token = request.headers.get("Authorization")
-    #verify_token(token)
     messages = get_messages_by_token(token)
     if not messages:
-        return jsonify({"message": "TODO", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Here are your messages", "success": True, "data": messages})
 
 
@@ -186,7 +175,7 @@ def get_user_messages_by_email(email):
 
     messages = get_messages_by_email(email)
     if not messages:
-        return jsonify({"message": "", "success": False})
+        return jsonify({"message": "Something went wrong", "success": False})
     return jsonify({"message": "Here are your messages", "success": True, "data": messages})
 
 
@@ -201,10 +190,6 @@ def sign_out():
 
     if not logged_out:
         return jsonify({"message": "Something went wrong", "success": False})
-    existing_ws = active_sessions[my_email]
-    existing_ws.close()
-    active_token.pop(my_email)
-    active_sessions.pop(my_email)
     return jsonify({"message": "Successfully logged out", "success": True})
 
 @app.route('/forced_sign_out', methods=['DELETE'])
@@ -222,6 +207,4 @@ def forced_sign_out():
 
 
 if __name__ == "__main__":
-  #  with app.app_context():
-   #     init_db()
     app.run(host='0.0.0.0', port=5000)
