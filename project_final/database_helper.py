@@ -42,14 +42,15 @@ def find_user(email):
         c = conn.cursor()
         c.execute(query, (email,))
         user = c.fetchone()
-        
+
         if not user:
-            return {"message": "No user with that email found.", "success": False}
+            return None
         
         # Returning user data as a dictionary
         user_data = {key: user[key] for key in user.keys()}
         
-        return {"user": user_data, "success": True}
+        return user_data
+    return None
 
 
 
@@ -160,7 +161,6 @@ def get_messages_by_token(token):
             """
     c.execute(query, (email,))
     messages = c.fetchall()
-    
     return messages
 
 
@@ -174,7 +174,8 @@ def get_messages_by_email(email):
             """
     c.execute(query, (email,))
     messages = c.fetchall()
-    return messages
+    messages_data = [(message["content"], message["sender"]) for message in messages]
+    return messages_data
 
 def remove_logged_user(token):
     conn = get_db()
@@ -189,15 +190,18 @@ def remove_logged_user(token):
         return False
     return True
 
+def print_db():
+    conn = get_db()
+    c = conn.cursor()
+    query = """
+            SELECT *
+            FROM loggeduser 
+            """
+    c.execute(query)
+    messages = c.fetchall()
+    return messages
+
+
 
 def is_valid_email(email):
     return re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email) 
-
-
-def is_valid_password(password):
-    if len(password) < 8:
-        return false
-    return True
-
-def wrong_token():
-    return jsonify({"message": "Wrong token!", "success": False})

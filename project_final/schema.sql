@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS loggeduser;
-DROP TABLE IF EXISTS messagewall;
 
 CREATE TABLE user (
     firstname VARCHAR(30) NOT NULL,
@@ -23,6 +22,6 @@ CREATE TABLE message (
 );
 
 CREATE TABLE loggeduser (
-    email VARCHAR(50) PRIMARY KEY,
+    email VARCHAR(50) NOT NULL,
     token VARCHAR(70) NOT NULL
 );

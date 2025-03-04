@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <link href="static/client.css" type="text/css" rel="stylesheet">
     <script src="static/client.js" type="text/javascript"></script>
-  <!--  <script src="serverstub.js" type="text/javascript"></script> -->
     <script type="text/view" id="profilescript">
         <body>
             <div id="profile">
@@ -28,7 +27,7 @@
                         <div id="browsemessageboard" class="messageboard">
                             <form id="broswemessagebar" class="messagebar" onsubmit="browseSendMessage(this); return false;">
                                 <p>Post a message:</p>
-                                <input type="text" name="messagefield" id="browsemessagefield" class="messagefield">
+                                <input type="text" name="messagefield" id="browsemessagefield" class="messagefield" ondrop="dropbrowse(event)" ondragover="allowDrop(event)">
                                 <input type="submit" value="Send Message">
                                 <div id="browsefeedbackmessage"></div>
                             </form>
@@ -44,7 +43,7 @@
                     <div id="homemessageboard" class="messageboard">
                         <form id="homemessagebar" class="messagebar" onsubmit="homeSendMessage(this); return false;">
                             <p>Post a message:</p>
-                            <input type="text" name="messagefield" id="homemessagefield" class="messagefield">
+                            <input type="text" name="messagefield" id="homemessagefield" class="messagefield" ondrop="drophome(event)" ondragover="allowDrop(event)">
                             <input type="submit" value="Send Message">
                             <div id="homefeedbackmessage"></div>
                         </form>
